@@ -5,35 +5,35 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import net.objecthunter.exp4j.ExpressionBuilder
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var mathOperation: TextView
-    private lateinit var resultText: TextView
+class MainActivity : AppCompatActivity() {     //управляет интерфейсом и логикой калькулятора.
+    private lateinit var mathOperation: TextView  //отображает текущее матем. выраж.
+    private lateinit var resultText: TextView   //результат вычисления.
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {  //инициализация интерфейса
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mathOperation = findViewById(R.id.math_operation)
+        mathOperation = findViewById(R.id.math_operation)  //элементы интрефейса по идентификаторам
         resultText = findViewById(R.id.result_text)
 
-        setNumberListeners()
+        setNumberListeners()  //методы для обработки собфтий
         setOperationListeners()
     }
 
-    private fun setNumberListeners() {
+    private fun setNumberListeners() {  //обраьотчик событи для цифр и точек.  созд. идентификатор кнопок
         val numberButtons = listOf(
             R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4,
             R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.dot_btn
         )
 
         numberButtons.forEach { id ->
-            findViewById<TextView>(id).setOnClickListener {
-                mathOperation.append((it as TextView).text)
+            findViewById<TextView>(id).setOnClickListener {  //для каждой конпки созд. обработчик событий
+                mathOperation.append((it as TextView).text)    //добав. в MATCHOPERATION
             }
         }
     }
 
-    private fun setOperationListeners() {
+    private fun setOperationListeners() {   //обработчик чобфтий для спец. кнопок
         val operationButtons = listOf(
             R.id.plus_btn, R.id.minus_btn, R.id.mult_btn, R.id.div_btn,
             R.id.lsk_btn, R.id.rsk_btn
