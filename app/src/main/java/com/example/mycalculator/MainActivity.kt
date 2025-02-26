@@ -45,19 +45,19 @@ class MainActivity : AppCompatActivity() {     //управляет интерф
             }
         }
 
-        findViewById<TextView>(R.id.ac_btn).setOnClickListener {
+        findViewById<TextView>(R.id.ac_btn).setOnClickListener {  //отчистка строки
             mathOperation.text = ""
             resultText.text = ""
         }
 
-        findViewById<TextView>(R.id.back_btn).setOnClickListener {
+        findViewById<TextView>(R.id.back_btn).setOnClickListener {  //кнопка удаления  удаления
             val text = mathOperation.text.toString()
             if (text.isNotEmpty()) {
                 mathOperation.text = text.substring(0, text.length - 1)
             }
         }
 
-        findViewById<TextView>(R.id.equal_btn).setOnClickListener {
+        findViewById<TextView>(R.id.equal_btn).setOnClickListener {  //кнопка вычислений
             try {
                 val expression = ExpressionBuilder(mathOperation.text.toString()).build()
                 val result = expression.evaluate()
