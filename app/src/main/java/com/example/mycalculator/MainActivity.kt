@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity() {
         mathOperation = findViewById<View>(R.id.math_operation) as TextView
         resultText = findViewById<View>(R.id.result_text) as TextView
 
-        findViewById<View>(R.id.btn_0).setOnClickListener { v: View? -> // ищем viwe индентификаторм функции btn_0
-            mathOperation!!.append(
-                "0"
+        findViewById<View>(R.id.btn_0).setOnClickListener { v: View? -> // ищем viwe индентификаторм функции btn_0, setOnClickListener- задает действие которое будет выполняться при нажатии кнопки
+            mathOperation!!.append(                                     // v - содержит ссылку на кнопку, mathOperation!! это TextView который содержит мат.выражение (!! проверка не на null)
+                "0"                                                     //append добовляем 0 в текст
             )
         }
         findViewById<View>(R.id.btn_1).setOnClickListener { v: View? ->
@@ -109,7 +109,8 @@ class MainActivity : AppCompatActivity() {
             resultText!!.text = "0"
         }
 
-        findViewById<View>(R.id.back_btn).setOnClickListener { v: View? ->
+        findViewById<View>(R.id.back_btn).setOnClickListener { v: View? ->  //Проверяем, есть ли хотя бы один символ (text.length > 0).
+                                                                                         // Если да, обрезаем строку, удаляя последний символ
             val text = mathOperation!!.text.toString()
             if (text.length > 0) {
                 mathOperation!!.text = text.substring(0, text.length - 1)
