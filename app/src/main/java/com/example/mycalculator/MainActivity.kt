@@ -1,69 +1,127 @@
 package com.example.mycalculator
 
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import net.objecthunter.exp4j.ExpressionBuilder
 
-class MainActivity : AppCompatActivity() {     //управляет интерфейсом и логикой калькулятора.
-    private lateinit var mathOperation: TextView  //отображает текущее матем. выраж.
-    private lateinit var resultText: TextView   //результат вычисления.
+class MainActivity : AppCompatActivity() {
+    var mathOperation: TextView? = null
+    var resultText: TextView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {  //инициализация интерфейса
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mathOperation = findViewById(R.id.math_operation)  //элементы интрефейса по идентификаторам
-        resultText = findViewById(R.id.result_text)
+        mathOperation = findViewById<View>(R.id.math_operation) as TextView
+        resultText = findViewById<View>(R.id.result_text) as TextView
 
-        setNumberListeners()  //методы для обработки собфтий
-        setOperationListeners()
-    }
+        findViewById<View>(R.id.btn_0).setOnClickListener { v: View? -> // ищем viwe индентификаторм функции btn_0
+            mathOperation!!.append(
+                "0"
+            )
+        }
+        findViewById<View>(R.id.btn_1).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "1"
+            )
+        }
+        findViewById<View>(R.id.btn_2).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "2"
+            )
+        }
+        findViewById<View>(R.id.btn_3).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "3"
+            )
+        }
+        findViewById<View>(R.id.btn_4).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "4"
+            )
+        }
+        findViewById<View>(R.id.btn_5).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "5"
+            )
+        }
+        findViewById<View>(R.id.btn_6).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "6"
+            )
+        }
+        findViewById<View>(R.id.btn_7).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "7"
+            )
+        }
+        findViewById<View>(R.id.btn_8).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "8"
+            )
+        }
+        findViewById<View>(R.id.btn_9).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "9"
+            )
+        }
+        findViewById<View>(R.id.dot_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "."
+            )
+        }
 
-    private fun setNumberListeners() {  //обраьотчик событи для цифр и точек.  созд. идентификатор кнопок
-        val numberButtons = listOf(
-            R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4,
-            R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.dot_btn
-        )
+        findViewById<View>(R.id.plus_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "+"
+            )
+        }
+        findViewById<View>(R.id.minus_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "-"
+            )
+        }
+        findViewById<View>(R.id.mult_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "*"
+            )
+        }
+        findViewById<View>(R.id.div_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "/"
+            )
+        }
+        findViewById<View>(R.id.lsk_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                "("
+            )
+        }
+        findViewById<View>(R.id.rsk_btn).setOnClickListener { v: View? ->
+            mathOperation!!.append(
+                ")"
+            )
+        }
 
-        numberButtons.forEach { id ->
-            findViewById<TextView>(id).setOnClickListener {  //для каждой конпки созд. обработчик событий
-                mathOperation.append((it as TextView).text)    //добав. в MATCHOPERATION
+        findViewById<View>(R.id.ac_btn).setOnClickListener { v: View? ->
+            mathOperation!!.text = "0"
+            resultText!!.text = "0"
+        }
+
+        findViewById<View>(R.id.back_btn).setOnClickListener { v: View? ->
+            val text = mathOperation!!.text.toString()
+            if (text.length > 0) {
+                mathOperation!!.text = text.substring(0, text.length - 1)
             }
         }
-    }
 
-    private fun setOperationListeners() {   //обработчик чобфтий для спец. кнопок
-        val operationButtons = listOf(
-            R.id.plus_btn, R.id.minus_btn, R.id.mult_btn, R.id.div_btn,
-            R.id.lsk_btn, R.id.rsk_btn
-        )
-
-        operationButtons.forEach { id ->
-            findViewById<TextView>(id).setOnClickListener {
-                mathOperation.append((it as TextView).text)
-            }
-        }
-
-        findViewById<TextView>(R.id.ac_btn).setOnClickListener {  //отчистка строки
-            mathOperation.text = ""
-            resultText.text = ""
-        }
-
-        findViewById<TextView>(R.id.back_btn).setOnClickListener {  //кнопка удаления  удаления
-            val text = mathOperation.text.toString()
-            if (text.isNotEmpty()) {
-                mathOperation.text = text.substring(0, text.length - 1)
-            }
-        }
-
-        findViewById<TextView>(R.id.equal_btn).setOnClickListener {  //кнопка вычислений
+        findViewById<View>(R.id.equal_btn).setOnClickListener { v: View? ->
             try {
-                val expression = ExpressionBuilder(mathOperation.text.toString()).build()
-                val result = expression.evaluate()
-                resultText.text = result.toString()
+                val result = ExpressionBuilder(mathOperation!!.text.toString()).build().evaluate()
+                resultText!!.text = result.toString() + ""
             } catch (e: Exception) {
-                resultText.text = "Error"
+                resultText!!.text = "Ошибка!"
             }
         }
     }
