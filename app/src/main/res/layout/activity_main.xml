@@ -39,25 +39,27 @@
             android:orientation="horizontal"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
-            
+            android:layout_height="0.25dp">
+
+            <TextView
+                android:id="@+id/ac_btn"
+                style="@style/NumberButton"
+
+                android:layout_width="180dp"
+                android:text="AC" />
+<!--                <TextView-->
+<!--                style="@style/NumberButton"-->
+<!--                    android:id="@+id/lsk_btn"-->
+<!--                android:text="("-->
+<!--                />-->
+<!--                <TextView-->
+<!--                style="@style/NumberButton"-->
+<!--                    android:id="@+id/rsk_btn"-->
+<!--                android:text=")"-->
+<!--                />-->
                 <TextView
                 style="@style/NumberButton"
-                    android:id="@+id/ac_btn"
-                android:text="AC"
-                />
-                <TextView
-                style="@style/NumberButton"
-                    android:id="@+id/lsk_btn"
-                android:text="("
-                />
-                <TextView
-                style="@style/NumberButton"
-                    android:id="@+id/rsk_btn"
-                android:text=")"
-                />
-                <TextView
-                style="@style/NumberButton"
+
                     android:id="@+id/div_btn"
                 android:text="/"
                 />
