@@ -56,8 +56,8 @@ class LocationActivity : AppCompatActivity() {
     private lateinit var tvLon: TextView
     private lateinit var date: TextView
     private lateinit var height: TextView
-    private lateinit var shtamp: TextView
-    private val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+    private lateinit var stamp: TextView
+    private val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
     private val gson = Gson()
     private val locationDataList = mutableListOf<LocationData>()
 
@@ -80,7 +80,7 @@ class LocationActivity : AppCompatActivity() {
         height = findViewById(R.id.tv_height) as TextView
         tvHistory = findViewById(R.id.tv_history)
         scrollView = findViewById(R.id.scroll_view)
-        shtamp = findViewById(R.id.tv_shtamp) as TextView
+        stamp = findViewById(R.id.tv_shtamp) as TextView
 
             locationRequest = LocationRequest.create().apply {
                 interval = LOCATION_UPDATE_INTERVAL
@@ -114,13 +114,13 @@ class LocationActivity : AppCompatActivity() {
         tvLat.text = location.latitude.toString()
         tvLon.text = location.longitude.toString()
         height.text = location.altitude.toString()
-        shtamp.text = location.time.toString()
+        stamp.text = location.time.toString()
 
         val locationData = LocationData(
             latitude = location.latitude,
             longitude = location.longitude,
             altitude = if (location.hasAltitude()) location.altitude else null,
-            timestamp = dateFormat.format(Date())
+            timestamp = SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date(location.time))
         )
         locationDataList.add(locationData)
         saveToJsonFile(locationDataList)
@@ -128,7 +128,7 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun updateHistoryView() {
-        val file = File(getExternalFilesDir(null), "location_data.json")
+        val file = File(getExternalFilesDir(null), "location.json")
         if (file.exists()) {
             try {
                 val jsonContent = file.readText()
@@ -224,7 +224,7 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun updateTime() {
-        val currentTime = dateFormat.format(Date())
+        val currentTime = SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())
         date.text = "Время: $currentTime"
     }
 
