@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         val buttonGoToCalculator = findViewById<Button>(R.id.buttonGoToCalculator)
         val buttonGoTomusicApp = findViewById<Button>(R.id.buttonMusic)
         val buttonGoToGPSApp = findViewById<Button>(R.id.buttonGps)
+        val buttonGoToserverApp = findViewById<Button>(R.id.buttonServer)
+        val buttonGoToTelephony = findViewById<Button>(R.id.buttonGoToTelephony)
 
 
         buttonGoToCalculator.setOnClickListener {
@@ -30,6 +32,16 @@ class MainActivity : AppCompatActivity() {
 
         buttonGoToGPSApp.setOnClickListener {
             val intent = Intent(this, LocationActivity::class.java)
+            startActivity(intent)
+        }
+
+        buttonGoToserverApp.setOnClickListener {
+            val intent = Intent(this, serverActivity::class.java)
+            startActivity(intent)
+        }
+
+        buttonGoToTelephony.setOnClickListener {
+            val intent = Intent(this, TelephonyActivity::class.java)
             startActivity(intent)
         }
     }

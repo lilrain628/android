@@ -16,6 +16,13 @@
         android:text="Open Calculator"
         android:layout_marginBottom="16dp" />
 
+    <Button
+    android:id="@+id/buttonGoToTelephony"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Open telephony"
+    android:layout_marginBottom="16dp" />
+
 
     <Button
         android:id="@+id/buttonMusic"
@@ -28,5 +35,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Open GPS" />
+
+    <Button
+        android:id="@+id/buttonServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="server/client" />
+
 
 </LinearLayout>

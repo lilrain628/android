@@ -32,6 +32,9 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import org.zeromq.SocketType
+import org.zeromq.ZContext
+import org.zeromq.ZMQ
 
 class LocationActivity : AppCompatActivity() {
 
@@ -45,10 +48,15 @@ class LocationActivity : AppCompatActivity() {
     private lateinit var tvHistory: TextView
     private lateinit var scrollView: ScrollView
 
+    // ZeroMQ переменные
+    private var zmqContext: ZContext? = null
+    private var zmqSocket: ZMQ.Socket? = null
+    private val serverHost = "tcp://10.0.2.2:2222" // для эмулятора
+
     companion object {
         private const val PERMISSION_REQUEST_ACCESS_LOCATION= 100
         private const val TIME_UPDATE_INTERVAL = 1000L
-        private const val LOCATION_UPDATE_INTERVAL = 1000L
+        private const val LOCATION_UPDATE_INTERVAL = 2500L
     }
 
     private lateinit var myFusedLocationProviderClient: FusedLocationProviderClient
@@ -101,6 +109,24 @@ class LocationActivity : AppCompatActivity() {
                 updateTime()
                 handler.postDelayed(timeUpdater, TIME_UPDATE_INTERVAL)
             }
+
+        initZeroMQ();
+    }
+
+    private fun initZeroMQ() {
+        Thread {
+            try {
+                zmqContext = ZContext()
+                zmqSocket = zmqContext!!.createSocket(SocketType.REQ).apply {
+                    setReceiveTimeOut(5000)
+                    setSendTimeOut(5000)
+                    connect(serverHost)
+                }
+                Log.d(LOG_TAG, "ZeroMQ подключен к серверу")
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Ошибка ZeroMQ: ${e.message}")
+            }
+        }.start()
     }
 
 //    data class LocationData(
@@ -109,6 +135,23 @@ class LocationActivity : AppCompatActivity() {
 //        val altitude: Double?,
 //        val timestamp: String
 //    )
+private fun sendLocationToServer(locationData: LocationData) {
+    Thread {
+        try {
+            val jsonData = gson.toJson(locationData)
+            zmqSocket?.send(jsonData.toByteArray(), 0)
+
+            val response = zmqSocket?.recv(0)
+            if (response != null) {
+                Log.d(LOG_TAG, "Координаты отправлены ${String(response)}")
+            }
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Ошибка ${e.message}")
+        }
+    }.start()
+}
+
+
 
     private fun updateLocationUI(location: Location) {
         tvLat.text = location.latitude.toString()
@@ -124,6 +167,7 @@ class LocationActivity : AppCompatActivity() {
         )
         locationDataList.add(locationData)
         saveToJsonFile(locationDataList)
+        sendLocationToServer(locationData)
         updateHistoryView()
     }
 
@@ -185,6 +229,16 @@ class LocationActivity : AppCompatActivity() {
         super.onPause()
         handler.removeCallbacks(timeUpdater)
         stopLocationUpdates()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            zmqSocket?.close()
+            zmqContext?.close()
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Ошибка закрытия ZeroMQ: ${e.message}")
+        }
     }
 
     private fun startLocationUpdates() {
